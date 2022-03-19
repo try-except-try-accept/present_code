@@ -2,16 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a943902d-a43f-42b7-bc5b-c1483ff42977" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/scripts/CodeDemo.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scripts/helpers.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/present_code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/present_code.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/CodeDemo.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/CodeDemo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/events.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/events.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/styles.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/todo.txt" beforeDir="false" afterPath="$PROJECT_DIR$/todo.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

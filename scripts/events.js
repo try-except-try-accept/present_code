@@ -1,9 +1,34 @@
 
-
+state = null;
 
 document.addEventListener('keydown', handle_key)
+document.addEventListener('mousedown', handle_click)
+document.addEventListener('mousemove', handle_move)
+document.addEventListener('mouseup', handle_up)
 
+function handle_click(event)
+{
+    current_object = new CodeDemo(event.x, event.y);
+    state = "create";
+}
 
+function handle_move(event)
+{
+    if (state == "create")
+    {
+        current_object.adjust_dimensions(event.x, event.y);
+    }
+}
+
+function handle_up(event)
+{
+    console.log("mouseup")
+    if (state == "create")
+    {
+
+        state = null;
+    }
+}
 
 function handle_key(event)
 {
@@ -48,4 +73,3 @@ function handle_key(event)
 
 
 
-current_object = new CodeDemo(0, 0);

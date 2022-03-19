@@ -4,13 +4,21 @@ class CodeDemo
 {
     constructor(x, y)
     {
-        this.x = x;
-        this.y = y;
+        this.x1 = x;
+        this.y1 = y;
+        this.x2 = x;
+        this.y2 = y;
         this.indent_depth = 0;
         this.tokens = [""];
         this.styles = [];
         this.in_string_sing = false;
         this.in_string_doub = false;
+
+        this.display = document.createElement("code");
+        document.getElementsByTagName("body")[0].appendChild(this.display);
+        this.display.style['position'] = 'fixed';
+        this.display.style['top'] = y;
+        this.display.style['left'] = x;
     }
 
     get last_token()
@@ -41,7 +49,15 @@ class CodeDemo
 
     set last_token(new_char)
     {
-        this.tokens[this.tokens.length-1] += new_char
+        this.tokens[this.tokens.length-1] += new_char;
+    }
+
+    adjust_dimensions(new_x, new_y)
+    {
+        this.x2 = new_x;
+        this.y2 = new_y;
+        this.display.style['width'] =  new_x - this.x1;
+        this.display.style['height'] = new_y - this.y1;
     }
 
     add_token(token)
@@ -49,6 +65,7 @@ class CodeDemo
         // a token and null style to the stack
         this.tokens.push(token);
         this.styles.push(null);
+
     }
 
 
@@ -122,16 +139,13 @@ class CodeDemo
         let delim_found = false;
         if (TOKEN_ENDERS.includes(new_char))
         {
-            delim_found = true;
+            if (!this.in_string_sing && !this.in_string_doub)
+            {
+                delim_found = true;
+            }
         }
 
         let pos = 1;
-
-
-        if (new_char == " " && (this.in_string_sing || this.in_string_doub))
-        {
-            delim_found = false;
-        }
 
 
         if (new_char == "'")
@@ -167,10 +181,22 @@ class CodeDemo
 
     highlight_syntax()
     {
+        let def_found = false;
         for (let i=0; i<this.tokens.length; i++)
         {
             let token = this.tokens[i].replace(KW_STYLE, "").replace(BI_STYLE, "").replace(END_SPAN, "");
-            if (KEYWORDS.includes(token))
+
+
+            if (def_found && token.trim().length > 0 )
+            {
+                console.log("hi lite func name");
+                if (this.tokens[i].indexOf(SUB_STYLE) == -1)
+                {
+                    this.styles[i] = SUB_STYLE;
+                    def_found = false;
+                }
+            }
+            else if (KEYWORDS.includes(token))
             {
                 if (this.tokens[i].indexOf(KW_STYLE) == -1)
                 {
@@ -193,6 +219,12 @@ class CodeDemo
             {
                 this.styles[i] = null;
             }
+
+            if (token == "def")
+            {
+                def_found = true;
+                console.log("def found");
+            }
         }
 
         console.log(this.tokens);
@@ -205,7 +237,7 @@ class CodeDemo
     {
         this.highlight_syntax();
         let out_string = this.markup;
-        document.querySelector("#test_display").innerHTML = out_string;
+        this.display.innerHTML = out_string;
     }
 
 

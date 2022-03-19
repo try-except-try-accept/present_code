@@ -1,5 +1,9 @@
 
 
+code
+{
+    border: thin #DDDDDD solid;
+}
 
 .py_kw
 {
@@ -14,4 +18,9 @@
 .py_str
 {
     color:green;
+}
+
+.py_sub
+{
+    color:blue;
 }
