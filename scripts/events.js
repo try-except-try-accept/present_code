@@ -1,12 +1,15 @@
 
 document.addEventListener('keydown', handle_key)
 
+
+
 text_stack = "";
 indent_depth = 0;
 TAB = "&nbsp;&nbsp;&nbsp;&nbsp;";
 NOT_IMPLEMENTED = ["Home", "End"];
 KW_STYLE = '<span class="py_kw">';
 BI_STYLE = '<span class="py_built">';
+STR_STYLE = '<span class="py_str">';
 BREAK = "<br>"
 END_SPAN = "</span>"
 SPECIAL_TERMS = [TAB, BREAK, END_SPAN]
@@ -18,19 +21,35 @@ BUILTINS = ["abs", "aiter", "all", "any", "anext", "ascii", "bin", "bool", "brea
 tokens = [""];
 styles = []
 
-TOKEN_ENDERS = [" ", "[", ",", "]", "(", ")", "{", "}", '"', "'", ":"];
+TOKEN_ENDERS = [" ", "[", ",", "]", "(", ")", "{", "}", ":"];
 
-in_string = false;
+in_string_sing = false;
+in_string_doub = false;
 
-function handle_key(event)
+function add_token(token)
 {
-    console.log(event.code);
-    console.log(event.key);
-    console.log(event.keyCode);
-    let to_append = "";
-    if (event.code == "Backspace")
-    {
+    tokens.push(token);
+    styles.push(null);
+}
 
+function is_string(data)
+{
+    if (data[0] == "'" && "'" == data[data.length-1])
+    {
+        return true;
+    }
+    else if (data[0] == '"' && '"' == data[data.length-1])
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+function process_deletion()
+{
 
         last_token = tokens[tokens.length-1];
 
@@ -65,90 +84,11 @@ function handle_key(event)
                 styles.push(null);
             }
         }
+}
 
-
-
-    }
-    else if (event.code == "Enter")
-    {
-        text_stack += BREAK;
-        tokens.push(BREAK);
-        tokens.push("");
-        styles.push("");
-        styles.push("");
-        if (indent_depth > 0)
-        {
-            for (let i=0; i<indent_depth; i++)
-            {
-                tokens.push(TAB);
-                tokens.push("");
-                styles.push("");
-                styles.push("");
-            }
-        }
-    }
-    else if (NOT_IMPLEMENTED.includes(event.code) )
-    {
-        console.log(event.code + " not implemented")
-    }
-    else if (event.code == "Tab")
-    {
-        event.preventDefault();
-
-        tokens.push(TAB);
-        tokens.push("");
-        styles.push("");
-        styles.push("");
-        indent_depth++;
-    }
-    else if (event.keyCode > 31)
-    {
-
-        let new_char = event.key
-
-        let delim_found = false;
-        if (TOKEN_ENDERS.includes(new_char))
-        {
-            delim_found = true;
-            if (tokens[tokens.length-1].length > 0)
-            {
-                tokens.push("");
-                styles.push("");
-            }
-        }
-
-        let pos = 1;
-
-
-
-        if (new_char == "'" || new_char == '"')
-        {
-            if (in_string)
-            {
-                pos = 2;
-                in_string = false;
-            }
-            else
-            {
-                in_string = true;
-            }
-        }
-
-        tokens[tokens.length-pos] += new_char;
-
-
-        if (delim_found || (!in_string && new_char == ' '))
-        {
-            tokens.push("");
-            styles.push("");
-        }
-
-    }
-
-    syntax_highlight();
-
-    let out_string = "";
-
+function mark_up_tokens()
+{
+    let out_string = ""
     for (var i=0; i<tokens.length; i++)
     {
         if (styles[i] !== null)
@@ -161,6 +101,103 @@ function handle_key(event)
             out_string += "</span>";
         }
     }
+    return out_string;
+}
+
+
+function handle_key(event)
+{
+    console.log(event.code);
+    console.log(event.key);
+    console.log(event.keyCode);
+    let to_append = "";
+
+
+    if (event.code == "Backspace")
+    {
+
+        process_deletion();
+
+
+
+    }
+    else if (event.code == "Enter")
+    {
+        text_stack += BREAK;
+        add_token(BREAK);
+        add_token("");
+
+        if (indent_depth > 0)
+        {
+            for (let i=0; i<indent_depth; i++)
+            {
+                add_token(TAB);
+                add_token("");
+            }
+        }
+    }
+    else if (NOT_IMPLEMENTED.includes(event.code) )
+    {
+        console.log(event.code + " not implemented")
+    }
+    else if (event.code == "Tab")
+    {
+        event.preventDefault();
+
+        add_token(TAB);
+        add_token("");
+        indent_depth++;
+    }
+    else if (event.keyCode > 31)
+    {
+
+        let new_char = event.key
+
+        let delim_found = false;
+        if (TOKEN_ENDERS.includes(new_char))
+        {
+            delim_found = true;
+        }
+
+        let pos = 1;
+
+
+        if (new_char == " " && (in_string_sing || in_string_doub))
+        {
+            delim_found = false;
+        }
+
+
+        if (new_char == "'")
+        {
+            in_string_sing = !in_string_sing
+        }
+        if (new_char == '"')
+        {
+            in_string_doub = !in_string_doub
+        }
+
+        console.log("in string doub is " + in_string_doub)
+        console.log("in string sing is " + in_string_sing)
+
+
+        if (delim_found)
+        {
+            add_token("");
+        }
+
+        tokens[tokens.length-1] += new_char;
+
+        if (delim_found)
+        {
+            add_token("");
+        }
+
+    }
+
+    syntax_highlight();
+
+    let out_string = mark_up_tokens();
 
     document.querySelector("#test_display").innerHTML = out_string;
 }
@@ -185,6 +222,11 @@ function syntax_highlight()
             {
                 styles[i] = BI_STYLE;
             }
+
+        }
+        else if (is_string(tokens[i]))
+        {
+            styles[i] = STR_STYLE;
         }
         else
         {
