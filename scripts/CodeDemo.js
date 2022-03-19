@@ -19,6 +19,7 @@ class CodeDemo
         this.display.style['position'] = 'fixed';
         this.display.style['top'] = y;
         this.display.style['left'] = x;
+        this.display.style.fontSize = "20px";
     }
 
     get last_token()
@@ -60,6 +61,17 @@ class CodeDemo
         this.display.style['height'] = new_y - this.y1;
     }
 
+    adjust_font_size()
+    {
+        console.log("decreasing font size");
+        let size = parseInt(this.display.style.fontSize.replace("px", ""));
+
+
+        size -= 1;
+
+        this.display.style.fontSize = size.toString() + "px";
+    }
+
     add_token(token)
     {
         // a token and null style to the stack
@@ -67,6 +79,8 @@ class CodeDemo
         this.styles.push(null);
 
     }
+
+
 
 
 
@@ -173,7 +187,10 @@ class CodeDemo
             this.add_token("");
         }
 
-        
+        if (is_overflown(this.display))
+        {
+            this.adjust_font_size();
+        }
 
 
 

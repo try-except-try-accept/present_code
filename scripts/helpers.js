@@ -14,3 +14,8 @@ function is_string(data)
         return false;
     }
 }
+
+function is_overflown(element)
+{
+    return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+}
