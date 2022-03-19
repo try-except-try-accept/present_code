@@ -6,27 +6,21 @@
 
 ############################
 
-
 # ctrl + n .... append new slide
 
 # right .... slide right
-
 # left .... slide left
 
 # t + click .... table
-
     # tab .... move to next column (wrap if necessary)
     # enter .... move to next row (wrap if necessary)
 
 # c + click .... code
-
     ^ font size responsive to line length
     ^ IDLE style syntax highlighting
 
 # click .... select element
-
     # delete .... delete element
 
 # double click .... select sub-element (if applicable)
-
 
