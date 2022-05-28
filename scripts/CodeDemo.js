@@ -101,6 +101,16 @@ class CodeDemo
         }
     }
 
+    process_execute()
+    {
+
+        let tab_fix = new RegExp(TAB, "g");
+        let break_fix = new RegExp(BREAK, "g");
+        let tok_string = this.tokens.join('').replace(tab_fix, "\t").replace(break_fix, "\n");
+        console.log(tok_string);
+        execute(tok_string);
+    }
+
     process_tab()
     {
         this.add_token(TAB);

@@ -6,10 +6,14 @@ document.addEventListener('mousedown', handle_click)
 document.addEventListener('mousemove', handle_move)
 document.addEventListener('mouseup', handle_up)
 
+key_map = {}
+
+
 function handle_click(event)
 {
     current_object = new CodeDemo(event.x, event.y);
     state = "create";
+
 }
 
 function handle_move(event)
@@ -30,8 +34,15 @@ function handle_up(event)
     }
 }
 
+function handle_key_up(event)
+{
+    key_map[event] = false;
+}
+
 function handle_key(event)
 {
+    key_map[event] = true;
+
     console.log(event.code);
     console.log(event.key);
     console.log(event.keyCode);
@@ -45,6 +56,10 @@ function handle_key(event)
     else if (event.code == "Enter")
     {
        current_object.process_enter();
+    }
+    else if (event.code == "AltRight")
+    {
+       current_object.process_execute();
     }
     else if (NOT_IMPLEMENTED.includes(event.code) )
     {
