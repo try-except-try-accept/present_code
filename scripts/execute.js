@@ -9,8 +9,9 @@ function execute(code)
 async function main()
 {
   pyodide = await loadPyodide();
-  execute(`lines = []
+  execute(`output = []
 def print(*s, sep=" ", end="\\n"):
-    lines.append(sep.join(str(i) for i in s) + end)
-    return "<br>".join(lines)`);
+    global output
+    output.append(sep.join(str(i) for i in s) + end)
+    return "<br>".join(output)`);
 }

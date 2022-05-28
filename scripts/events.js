@@ -8,12 +8,33 @@ document.addEventListener('mouseup', handle_up)
 
 key_map = {}
 
+all_objects = []
 
 function handle_click(event)
 {
-    current_object = new CodeDemo(event.x, event.y);
-    state = "create";
-
+    let overlap = false;
+    for (obj of all_objects)
+    {
+        console.log(all_objects.length, "objects")
+        console.log(`check if ${event.x} ${event.y} click is near obj at ${obj.x1} ${obj.y1}`)
+        if (event.x >= obj.x1 && event.x <= obj.x2)
+        {
+            if (event.y >= obj.y1 && event.y <= obj.y2)
+            {
+                state = "select";
+                current_object = obj;
+                current_object.select(event.x, event.y);
+                overlap = true;
+                break;
+            }
+        }
+    }
+    if (!overlap)
+    {
+        current_object = new CodeDemo(event.x, event.y);
+        state = "create";
+        all_objects.push(current_object);
+    }
 }
 
 function handle_move(event)
@@ -22,6 +43,11 @@ function handle_move(event)
     {
         current_object.adjust_dimensions(event.x, event.y);
     }
+    else if (state == "select")
+    {
+        console.log("moving whilst selected")
+        current_object.adjust_location(event.x, event.y);
+    }
 }
 
 function handle_up(event)
@@ -29,7 +55,11 @@ function handle_up(event)
     console.log("mouseup")
     if (state == "create")
     {
-
+        state = null;
+    }
+    else (state == "select")
+    {
+        current_object.deselect();
         state = null;
     }
 }

@@ -8,6 +8,7 @@ class CodeDemo
         this.y1 = y;
         this.x2 = x;
         this.y2 = y;
+
         this.indent_depth = 0;
         this.tokens = [""];
         this.styles = [];
@@ -57,8 +58,30 @@ class CodeDemo
     {
         this.x2 = new_x;
         this.y2 = new_y;
+
         this.display.style['width'] =  new_x - this.x1;
         this.display.style['height'] = new_y - this.y1;
+    }
+    adjust_location(new_x, new_y)
+    {
+        this.x1 = new_x - this.selection_offset[0];
+        this.y1 = new_y - this.selection_offset[1];
+        this.x2 = this.x1 + this.display.style['width'];
+        this.y2 = this.y1 + this.display.style['height'];
+        this.display.style['left'] =  this.x1;
+        this.display.style['top'] = this.y1;
+        console.log(`new loc ${this.x1} ${this.y1}`)
+    }
+
+    select(x, y)
+    {
+        console.log("select")
+        this.selection_offset = [x - this.x1, y - this.y1];
+        this.display.style['borderColor'] = "yellow";
+    }
+    deselect()
+    {
+        this.display.style['borderColor'] = 'grey';
     }
 
     adjust_font_size()
